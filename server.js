@@ -22,10 +22,19 @@ http.createServer((req, res) => {
 	try {
 		stats = fs.lstatSync(fileName);
 	} catch (e) {
-		res.writeHead(404, {'Content-Type': 'text/plain'})
-		res.write('404 Not Found\n');
-		res.end();
-		return;
+		console.log('Page not found\n');
+		
+		fs.readFile('404.html', function (err, html) {
+		    if (err) {
+		    	res.writeHead(404, {'Content-Type': 'text/plain'});	
+		        res.write('404 Page not found'); 
+		    }       
+		    res.writeHead(404, {'Content-Type': 'text/html'});		    
+		    res.write(html);  
+		    res.end();
+		
+		});
+		    return;
 	}
 
 	if(stats.isFile()) {
@@ -44,7 +53,7 @@ http.createServer((req, res) => {
 		res.write('500 Internal Error\n');
 		res.end();
 	}
-}).listen(1337);
+}).listen(2200);
 
 /*
 const hostname = '127.0.0.1';
